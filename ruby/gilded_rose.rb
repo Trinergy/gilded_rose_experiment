@@ -19,24 +19,25 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      case item.name
-      when 'Aged Brie'
-        target = AgedBrie.new(item)
-      when 'Backstage passes to a TAFKAL80ETC concert'
-        target = BackstagePass.new(item)
-      when 'Sulfuras, Hand of Ragnaros'
-        target = Sulfuras.new(item)
-      when 'Conjured Mana Cake'
-        target = ManaCake.new(item)
-      else
-        target = item
-      end
+      target = wrap_item(item)
       target.update
     end
   end
 
-  # when i tried to reassign the array element to a new object, it would not pass the test. it is because the test expects you to manipulate the referenced variable. reassigning it will not change the referenced variable. with map! it also only replaces, not actualy manipulation of passed argument by calling associated methods. is there another way of doing this? i dont really like wrapping stuff
-  # Example item = Item.new(x) will fail tests but item.method works fine
+  def wrap_item(item)
+    case item.name
+    when 'Aged Brie'
+      target = AgedBrie.new(item)
+    when 'Backstage passes to a TAFKAL80ETC concert'
+      target = BackstagePass.new(item)
+    when 'Sulfuras, Hand of Ragnaros'
+      target = Sulfuras.new(item)
+    when 'Conjured Mana Cake'
+      target = ManaCake.new(item)
+    else
+      target = ItemBase.new(item)
+    end
+  end
 end
 #       if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
 #         if item.quality > 0
@@ -97,6 +98,14 @@ class Item
   def to_s()
     "#{@name}, #{@sell_in}, #{@quality}"
   end
+end
+
+class ItemBase
+  attr_accessor :item
+
+  def initialize(item)
+    @item = item
+  end
 
   def update
     update_sell_in
@@ -104,28 +113,23 @@ class Item
   end
 
   def update_sell_in
-    @sell_in -= 1
+    item.sell_in -= 1
   end
 
   def update_quality
-    if @sell_in < 0
-      @quality -= 2 unless @quality <= 0
+    if item.sell_in < 0
+      item.quality -= 2 unless item.quality <= 0
     else
-      @quality -= 1 unless @quality <= 0
+      item.quality -= 1 unless item.quality <= 0
     end
   end
-
 end
 
-class AgedBrie < Item
+class AgedBrie < ItemBase
   attr_accessor :item
 
   def initialize(item)
     @item = item
-  end
-
-  def update_sell_in
-    item.sell_in -= 1
   end
 
   def update_quality
@@ -138,15 +142,11 @@ class AgedBrie < Item
 
 end
 
-class BackstagePass < Item
+class BackstagePass < ItemBase
   attr_accessor :item
 
   def initialize(item)
     @item = item
-  end
-
-  def update_sell_in
-    item.sell_in -= 1
   end
 
   def update_quality
@@ -167,7 +167,7 @@ class BackstagePass < Item
 
 end
 
-class Sulfuras < Item
+class Sulfuras < ItemBase
   attr_accessor :item
 
   def initialize(item)
@@ -178,15 +178,11 @@ class Sulfuras < Item
   end
 end
 
-class ManaCake < Item
+class ManaCake < ItemBase
   attr_accessor :item
 
   def initialize(item)
     @item = item
-  end
-
-  def update_sell_in
-    item.sell_in -= 1
   end
 
   def update_quality
