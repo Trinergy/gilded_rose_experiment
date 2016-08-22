@@ -36,6 +36,13 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
 
 // Aged Brie
 
+    function test_Aged_Brie_Sell_In_should_decrease_by_one() {
+      $items = array(new Item("Aged Brie", 2, 0));
+      $gildedRose = new GildedRose($items);
+      $gildedRose->update_quality();
+      $this->assertEquals(1, $items[0]->sell_in);
+    }
+
     function test_Aged_Brie_Name() {
       $items = array(new Item("Aged Brie", 2, 0));
       $gildedRose = new GildedRose($items);
@@ -81,6 +88,13 @@ class GildedRoseTest extends PHPUnit_Framework_TestCase {
     }
 
 // Backstage Pass
+
+    function test_Backstage_Pass_sell_in_decrease_by_1() {
+      $items = array(new Item("Backstage passes to a TAFKAL80ETC concert", 5, 46));
+      $gildedRose = new GildedRose($items);
+      $gildedRose->update_quality();
+      $this->assertEquals("4", $items[0]->sell_in);
+    }
 
     function test_Backstage_Pass_quality_increase_by_3_when_sell_in_is_lesser_than_6() {
       $items = array(new Item("Backstage passes to a TAFKAL80ETC concert", 5, 46));
