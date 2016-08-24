@@ -7,10 +7,9 @@ function Item(name, sell_in, quality) {
 var items = []
 
 // update_quality now RETURNS an items variable with updated values
-// flaws -  the quality upper limit logic is only getting applied in Aged Brie, not on adds in general, should wrap adds in its own function?
 
 function update_aged_brie(item) {
-  sell_in = sell_in_subtract(item.sell_in, 1)
+  sell_in = sell_in_decrease(item.sell_in, 1)
   quality = item.quality
 
   if (sell_in <= 0) {
@@ -24,14 +23,11 @@ function update_aged_brie(item) {
 }
 
 function update_sulfuras(item) {
-  sell_in = item.sell_in
-  quality = item.quality
-
-  return new Item(item.name, sell_in,quality)
+  return new Item(item.name, item.sell_in,item.quality)
 }
 
 function update_backstage_pass(item) {
-  sell_in = sell_in_subtract(item.sell_in, 1)
+  sell_in = sell_in_decrease(item.sell_in, 1)
   quality = item.quality
 
   if (sell_in < 1) {
@@ -51,17 +47,18 @@ function update_backstage_pass(item) {
 }
 
 function update_item_base(item) {
-  sell_in = sell_in_subtract(item.sell_in, 1)
+  sell_in = sell_in_decrease(item.sell_in, 1)
   quality = item.quality
 
   if (item.quality > 0) {
-    quality = quality - 1
+    quality = quality_decrease(quality, 1)
   }
 
   return new Item(item.name,sell_in,quality)
 }
 
-function sell_in_subtract(sell_in, amount) {
+// math operations
+function sell_in_decrease(sell_in, amount) {
   result = sell_in - amount
 
   if (result < 0) {
@@ -75,6 +72,15 @@ function quality_increase(quality, amount) {
 
   if (result > 50) {
     result = 50
+  }
+  return result
+}
+
+function quality_decrease(quality, amount) {
+  result = quality - amount
+
+  if (result < 0) {
+    result = 0
   }
   return result
 }
