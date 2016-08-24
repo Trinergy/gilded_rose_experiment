@@ -19,7 +19,7 @@ TEST(TestGildedRoseGroup, FirstTest)
     Item items[2];
     init_item(items, "Foo", 0, 0);
     update_quality(items, 1);
-    STRCMP_EQUAL("fixme", items[0].name);
+    STRCMP_EQUAL("Foo", items[0].name);
 }
 
 void example()
