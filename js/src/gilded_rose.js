@@ -85,21 +85,29 @@ function quality_decrease(quality, amount) {
   return result
 }
 
+function get_updated_item(item) {
+  types = {
+    'Aged Brie' : function() {
+      return update_aged_brie(item);
+    },
+    'Sulfuras, Hand of Ragnaros' : function() {
+      return update_sulfuras(item);
+    },
+    'Backstage passes to a TAFKAL80ETC concert' : function() {
+      return update_backstage_pass(item);
+    },
+    'default' : function() {
+      return update_item_base(item);
+    }
+  }
+
+  return (types[item.name] || types['default'])();
+}
+
 function update_quality() {
   updated_items = []
   for (var i = 0; i < items.length; i++) {
-    if (items[i].name == "Aged Brie") {
-      updated_items[i] = update_aged_brie(items[i])
-    } // aged brie if
-    else if (items[i].name == "Sulfuras, Hand of Ragnaros") {
-      updated_items[i] = update_sulfuras(items[i])
-    } // ragnaraos if
-    else if (items[i].name == "Backstage passes to a TAFKAL80ETC concert") {
-      updated_items[i] = update_backstage_pass(items[i])
-    } // backstage pass if
-    else {
-      updated_items[i] = update_item_base(items[i])
-    } // default
+    updated_items[i] = get_updated_item(items[i])
   }
   return updated_items
 }
