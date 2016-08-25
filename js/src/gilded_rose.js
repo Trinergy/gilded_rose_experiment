@@ -4,6 +4,7 @@ function Item(name, sell_in, quality) {
   this.quality = quality;
 }
 
+// This is more imperative, do some readings and do a V2
 var items = []
 
 function update_aged_brie(item) {
