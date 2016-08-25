@@ -112,6 +112,8 @@ class ItemBase
     update_quality
   end
 
+  private
+
   def update_sell_in
     item.sell_in -= 1
   end
@@ -132,6 +134,7 @@ class AgedBrie < ItemBase
     @item = item
   end
 
+  private
   def update_quality
     if item.sell_in < 0
       item.quality += 2 if item.quality < 50
@@ -149,6 +152,7 @@ class BackstagePass < ItemBase
     @item = item
   end
 
+  private
   def update_quality
     if item.sell_in < 0
       item.quality = 0
@@ -174,6 +178,7 @@ class Sulfuras < ItemBase
     @item = item
   end
 
+  private
   def update
   end
 end
@@ -184,7 +189,8 @@ class ManaCake < ItemBase
   def initialize(item)
     @item = item
   end
-
+  
+  private
   def update_quality
     if item.sell_in < 2
       item.quality -= 2 unless item.quality <= 0
